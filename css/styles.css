@@ -1,0 +1,102 @@
+
+@charset "utf-8";
+
+:root {
+  --ssg-color-purple: #6e2de5;
+  --ssg-color-black: #111;
+  --ssg-color-white: #F2F2F2;
+  --ssg-color-green: #2de56e;
+  --ssg-theme-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", system-ui;
+  --ssg-theme-heading-font-family: var(--ssg-theme-font-family);
+  --ssg-theme-code-font-family: var(--ssg-theme-font-family);
+  --ssg-theme-font-weight: 300;
+  --ssg-theme-heading-font-weight: 900;
+}
+
+:root {
+  --ssg-theme-background: var(--ssg-color-black);
+  --ssg-theme-text: var(--ssg-color-white);
+  --ssg-theme-primary: var(--ssg-color-purple);
+  --ssg-theme-secondary: var(--ssg-color-green);
+  --ssg-theme-indent: 16px;
+  --ssg-theme-max-width: 666px;
+}
+
+html,body,input,button {
+  background: var(--ssg-theme-background);
+  color: var(--ssg-theme-text);
+  font-family: var(--ssg-theme-font-family);
+  font-weight: var(--ssg-theme-font-weight);
+}
+body {
+  padding: 1em;
+  max-width: var(--ssg-theme-max-width);
+  margin: 0 auto;
+}
+a {
+  color: var(--ssg-theme-secondary);
+  text-decoration: underline;
+  text-decoration-color: var(--ssg-theme-primary);
+}
+a:visited {
+  color: var(--ssg-theme-primary);
+}
+img {
+    width: 80%;
+    display: block;
+    margin: 1em auto;
+}
+iframe {
+  display: block;
+  margin: 1em auto;
+}
+code {
+  /* background: var(--ssg-theme-background); */
+  font-family: var(--ssg-theme-code-font-family);
+  font-weight: bold;
+  padding: 0.25em;
+}
+br {
+  display: none;
+}
+li {
+  list-style-type: " ⟐ ";
+}
+hr {
+  border-color: var(--ssg-theme-primary);
+}
+*:focus {
+  outline: 1px solid var(--ssg-theme-secondary);
+}
+h1,h2,h3,h4,h5,h6 {
+  color: var(--ssg-theme-heading-color);
+  font-family: var(--ssg-theme-heading-font-family);
+  font-weight: var(--ssg-theme-heading-font-weight);
+}
+h1 {
+  text-align: center;
+}
+/* Reset style for anchors added to headers */
+h2 a, h3 a, h4 a {
+  color: var(--ssg-theme-text);
+  text-decoration: none;
+}
+h1 a {
+  color: var(--ssg-theme-primary);
+  text-decoration: none;
+}
+h1:hover::after, h2:hover::after, h3:hover::after, h4:hover::after {
+  text-decoration: none !important;
+}
+h2::before {
+  content: "## ";
+  color: var(--ssg-theme-secondary)
+}
+h3::before {
+  content: "### ";
+  color: var(--ssg-theme-secondary)
+}
+h4::before {
+  content: "#### ";
+  color: var(--ssg-theme-secondary)
+}

@@ -1,0 +1,107 @@
+:root {
+  --ssg-color-lilac: #e182e6;
+  --ssg-color-lilac: #ddb3e6;
+  --ssg-color-pink: rgba(255, 183, 195, 0.95);
+  --ssg-color-lightpink: rgba(247, 215, 220, 0.959);
+  --ssg-color-brown: rgba(255, 144, 162, 0.5);
+
+  --ssg-color-orange: #f06d06;
+  --ssg-color-purple: #6e2de5;
+  --ssg-color-blue: #377CB2;
+  --ssg-color-blue: rgb(88, 166, 255);
+  /* --ssg-color-blue: rgb(166 199 236);
+  --ssg-color-blue: rgb(215 255 218);
+  --ssg-color-blue: rgb(129 127 89);
+  --ssg-color-blue: #a6c7ec; */
+  
+
+
+  /* --ssg-color-blue: #81A8C6;
+  --ssg-color-blue: #51AAEE; */
+
+  --ssg-color-black: #111;
+  --ssg-color-black: hsla(0, 0%, 9%, 0.95);
+  --ssg-color-white: #F2F2F2;
+  --ssg-color-white: #7ca0c7c7;
+  /* --ssg-color-white: #e1f2f7; */
+  --ssg-color-green: #2de56e;
+  --ssg-color-green: #3dcfc2;
+  /* --ssg-theme-font-family: "Fraunces-Italic", serif; */
+  /* --ssg-theme-font-family: "Libre Franklin", sans-serif; */
+  /* --ssg-theme-heading-font-family: "Fraunces", serif; */
+
+  /* --ssg-theme-font-family: "Libre Franklin", serif; */
+  --ssg-theme-font-family: "IBM Plex Serif", serif;
+  --ssg-theme-font-family: "IBM Plex Sans", sans-serif;
+
+
+  /* --ssg-theme-heading-font-family: "Fraunces", serif; */
+
+  /* --ssg-theme-heading-font-family: "BioRhyme Expanded", serif; */
+  --ssg-theme-heading-font-family: "Fraunces", serif;
+
+  /* --ssg-theme-heading-font-family: "BioRhyme"; */
+
+
+  /* --ssg-theme-heading-font-family: "Messapia", display; */
+  /* --ssg-theme-heading-font-family: "Libre Franklin", sans-serif; */
+  /* --ssg-theme-code-font-family: "Iosevka Nerd Font"; */
+  --ssg-theme-code-font-family: "Source Code Pro", italic;
+  --ssg-theme-font-weight: 300;
+  --ssg-theme-heading-font-weight: 300;
+  text-rendering: optimizeLegibility;
+  font-size: 1.25rem;
+}
+
+:root {
+  --ssg-theme-heading-color: var(--ssg-color-blue);
+  --ssg-theme-background: var(--ssg-color-black);
+  --ssg-theme-text: var(--ssg-color-white);
+  --ssg-theme-primary: var(--ssg-color-lightpink);
+  --ssg-theme-secondary: var(--ssg-color-green);
+  --ssg-theme-indent: 16px;
+  --ssg-theme-max-width: 1024px;
+}
+
+code {
+  /* background: var(--ssg-theme-background); */
+  font-family: var(--ssg-theme-code-font-family);
+  font-weight: 400;
+  padding: 0.25em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 350;
+  margin-top: 6rem;
+}
+
+h2::before,
+h3::before,
+h4::before {
+  content: "⸺ ";
+  color: var(--ssg-theme-secondary)
+}
+
+h2::after,
+h3::after,
+h4::after {
+  content: " ⸺";
+  color: var(--ssg-theme-secondary)
+}
+
+li {
+  list-style-type: " ~ ";
+}

@@ -6,6 +6,7 @@
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
+    "lint": "standard --fix",
     "debug": "DEBUG=mdsg ./bin.js ./input ./output",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -42,5 +43,8 @@
     "unified": "^10.1.2",
     "unist-util-filter": "^4.0.0",
     "unist-util-visit": "^4.1.0"
+  },
+  "devDependencies": {
+    "standard": "^17.0.0"
   }
 }

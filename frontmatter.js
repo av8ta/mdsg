@@ -7,7 +7,7 @@ export default function frontmatter() {
       const yamlData = load(node.value, {
         json: true,
         onWarning() {
-          console.log('warning:', arguments)
+          console.warn('warning:', arguments)
         }
       })
       file.metadata = yamlData

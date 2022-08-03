@@ -6,7 +6,7 @@
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
-    "debug": "./bin.js ./input ./output",
+    "debug": "DEBUG=mdsg ./bin.js ./input ./output",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,6 +18,7 @@
   "author": "av8ta",
   "license": "MIT",
   "dependencies": {
+    "debug": "^4.3.4",
     "hastscript": "^7.0.2",
     "js-yaml": "^4.1.0",
     "pull-files": "^1.1.0",

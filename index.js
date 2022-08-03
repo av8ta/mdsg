@@ -4,12 +4,15 @@ import { renderMarkdown } from './remark.js'
 import path from 'node:path'
 import rc from 'rc'
 
-export async function render(inputDir = process.cwd(), outputDir = process.cwd()) {
+let print
+
+export async function render(inputDir = process.cwd(), outputDir = process.cwd(), { log = console.warn }) {
+  print = log
   if (inputDir === outputDir) outputDir = path.join(outputDir, 'output')
-  console.warn('inputDir ', inputDir); console.warn('outputDir', outputDir)
+  print('inputDir ', inputDir); print('outputDir', outputDir)
 
   const config = rc('mdsg', {})
-  console.warn(JSON.stringify(config, null, 2))
+  print('config:', JSON.stringify(config, null, 2))
 
   /**
    * if injectCss is false; config.css is rendered as <link rel="stylesheet" href="/..."> in head tag
@@ -32,7 +35,7 @@ export async function render(inputDir = process.cwd(), outputDir = process.cwd()
     }),
     write(outputDir, error => {
       if (error) console.error('Error converting markdown', error)
-      else console.log('Finished writing to', outputDir)
+      else print('Finished writing to', outputDir)
     })
   )
   // copy assets directory to output directory
@@ -40,6 +43,7 @@ export async function render(inputDir = process.cwd(), outputDir = process.cwd()
 }
 
 async function concatenateCss(directory) {
+  print('Concatenating css from', directory)
   return new Promise((resolve, reject) => {
     pull(
       read(path.join(directory, '**/*.css')),
@@ -54,16 +58,11 @@ async function concatenateCss(directory) {
 }
 
 async function outputAssets(assets, outputDir) {
-  const assetsDirname = assets.split(path.sep)
-  console.log('assets path', assets)
-  console.log('path.basename', path.basename(assets))
-  console.log('assetsDirname', assetsDirname)
   pull(
     read(path.join(assets, '**/*.*')),
-    pull.through(console.log),
     write(path.join(outputDir, path.basename(assets)), error => {
       if (error) console.error('Error copying assets', error)
-      else console.log('Finished copying assets to', outputDir)
+      else print('Finished copying assets to', outputDir)
     })
   )
 }

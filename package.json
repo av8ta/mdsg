@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^4.3.4",
+    "fs-extra": "^10.1.0",
     "hastscript": "^7.0.2",
     "js-yaml": "^4.1.0",
     "minimist2": "^1.0.2",

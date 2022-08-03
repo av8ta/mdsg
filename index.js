@@ -4,6 +4,7 @@ import { renderMarkdown } from './remark.js'
 import path from 'node:path'
 import rc from 'rc'
 import { appendFile } from 'node:fs/promises'
+import { ensureDir } from 'fs-extra'
 
 let print
 
@@ -24,6 +25,8 @@ export async function render (inputDir = process.cwd(), outputDir = process.cwd(
    */
   const css = injectCss ? undefined : isString(config.css) ? JSON.parse(config.css) : config.css
   const style = injectCss && config.assets ? await concatenateCss(config.assets) : undefined
+
+  await ensureDir(outputDir)
 
   return new Promise((resolve, reject) => {
     // read markdown and process with remark plugins

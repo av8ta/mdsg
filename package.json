@@ -4,10 +4,9 @@
   "description": "markdown based static site generator",
   "type": "module",
   "main": "index.js",
+  "bin": "bin.js",
   "scripts": {
-    "prestart": "rm -rf output",
-    "start": "./bin.js",
-    "poststart": "cp -r fonts output && cp -r css output && serve output",
+    "debug": "./bin.js ./input ./output",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -23,6 +22,7 @@
     "js-yaml": "^4.1.0",
     "pull-files": "^1.1.0",
     "pull-stream": "^3.6.14",
+    "rc": "^1.2.8",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-document": "^6.0.1",
     "rehype-format": "^4.0.1",

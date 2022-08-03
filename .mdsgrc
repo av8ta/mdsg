@@ -1,0 +1,10 @@
+{
+  "assets": "assets",
+  "css": [
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/github-dark.min.css",
+    "/assets/css/fonts.css",
+    "/assets/css/styles.css",
+    "/assets/css/theme.css"
+  ],
+  "injectCss": false
+}

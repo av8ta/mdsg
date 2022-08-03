@@ -13,6 +13,7 @@ export async function render(inputDir = process.cwd(), outputDir = process.cwd()
 
   const config = rc('mdsg', {})
   print('config:', JSON.stringify(config, null, 2))
+  const injectCss = config.injectCss === 'false' ? false : !!config.injectCss
 
   /**
    * if injectCss is false; config.css is rendered as <link rel="stylesheet" href="/..."> in head tag
@@ -21,8 +22,8 @@ export async function render(inputDir = process.cwd(), outputDir = process.cwd()
    * if injectCss is true; the config.assets directory has all css files concatenated
    * together lexicographically sorted by filename and inserted into style tags in head tag
    */
-  const css = config.injectCss ? undefined : config.css
-  const style = config.injectCss && config.assets ? await concatenateCss(config.assets) : undefined
+  const css = injectCss ? undefined : isString(config.css) ? JSON.parse(config.css) : config.css
+  const style = injectCss && config.assets ? await concatenateCss(config.assets) : undefined
 
   // read markdown and process with remark plugins
   pull(
@@ -65,4 +66,8 @@ async function outputAssets(assets, outputDir) {
       else print('Finished copying assets to', outputDir)
     })
   )
+}
+
+function isString(s) {
+  return !!(typeof s === 'string' || s instanceof String)
 }

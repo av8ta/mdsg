@@ -38,7 +38,7 @@ export async function render (inputDir = process.cwd(), outputDir = process.cwd(
           file.data = content.value
           file.path = file.path.replace('.md', '.html')
         } catch (error) {
-          appendFile(path.join(outputDir, 'mdsg.error.log'), `Error rendering markdown of ${path.join(file.base, file.path)}\n`)
+          appendFile(path.join(outputDir, 'mdsg.error.log'), `Error rendering markdown of ${path.join(file.base, file.path)} : ${error}\n`)
         } finally {
           // carry on regardless 🤷
           callback(null, file)

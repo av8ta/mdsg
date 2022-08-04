@@ -37,7 +37,7 @@ const authored = (_node, _index, _parent, data) => {
   if (!(data.author || data.readingTime?.minutes > 1)) return null
   return html`
     <span class="authored">
-      ${data.author ? html` // eslint-disable-line
+      ${data.author ? html`
         <em>${data.author} on </em>
         <time datetime="${makeDate(data.date).machine}">
           ${makeDate(data.date).human}

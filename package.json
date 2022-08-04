@@ -1,6 +1,6 @@
 {
   "name": "mdsg",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "markdown based static site generator",
   "type": "module",
   "main": "index.js",

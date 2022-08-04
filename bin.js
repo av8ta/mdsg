@@ -12,6 +12,10 @@ if (argv.help) {
   console.warn(help())
   process.exit(0)
 }
+if (argv.yaml) {
+  console.warn(yamlHelp())
+  process.exit(0)
+}
 
 let [input, output] = argv._
 input = input || process.cwd()
@@ -39,5 +43,34 @@ function help () {
     --css         JSON array of css to load (passed as string)
     --injectCss   Boolean. Default: false. true injects css from assets into html 
     --help        Displays this message
+    --yaml        Displays usage message for frontmatter metadata
+`
+}
+
+function yamlHelp() {
+  return `
+  ---
+  key: value
+  ---
+
+  <authored />
+
+  # Markdown document...
+
+  Frontmatter:
+
+  title?:   Title for html document
+  author?:  Document author. Written into <authored /> tag
+  date?:    Date published. Also written into <authored /> tag
+
+  meta?:    Properties | Array<Properties> | undefined
+    
+    Metadata to include in \`head\`.
+    
+    Each object is passed as
+    [\`properties\`](https://github.com/syntax-tree/hastscript#hselector-properties-children)
+
+    to [\`hastscript\`](https://github.com/syntax-tree/hastscript) with a
+    \`meta\` element.
 `
 }

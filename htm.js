@@ -13,7 +13,16 @@ export const rehypeHtm = (options = {}) => {
   return (tree, _file) => {
     visit(tree, (node, index, parent) => {
       if (selector(node, index, parent)) {
-        parent.children[index] = template(node, index, parent, data)
+        const children = parent.children[index].children
+        if (children.length > 0) console.log('ruhroh children!')
+        const newNode = template(node, index, parent, data)
+        // <authored /> has children that ought to be siblings
+        if (children.length > 0) {
+          const before = parent.children.slice(0, index)
+          const after = parent.children.slice(index + 1)
+          parent.children = [...before, newNode, ...children, ...after]
+        } else parent.children[index] = newNode // <authored></authored>
+        // if the template returns null, filter out the node
         parent.children = parent.children.filter(node => node !== null)
       }
     })

@@ -5,10 +5,20 @@ import path from 'node:path'
 import rc from 'rc'
 import { appendFile } from 'node:fs/promises'
 import { ensureDir } from 'fs-extra'
+import { PackrStream } from 'msgpackr'
 
 let print
+let stdout = false
+let encodeStream
 
-export async function render (inputDir = process.cwd(), outputDir = process.cwd(), { log = console.warn }) {
+export async function render (inputDir = process.cwd(), outputDir = process.cwd(), { log = console.warn, pipeout = false }) {
+  stdout = pipeout
+  if (stdout) {
+    encodeStream = new PackrStream({})
+    encodeStream.pipe(process.stdout).on('error', error => {
+      console.error(`encodeStream.pipe error: ${error.message}`)
+    })
+  }
   print = log
   print('inputDir ', inputDir); print('outputDir', outputDir)
 
@@ -26,33 +36,53 @@ export async function render (inputDir = process.cwd(), outputDir = process.cwd(
   const css = injectCss ? undefined : isString(config.css) ? JSON.parse(config.css) : config.css
   const style = injectCss && config.assets ? await concatenateCss(config.assets) : undefined
 
-  await ensureDir(outputDir)
+  const contentStream = pull(
+    // read markdown files and process with remark plugins
+    read(path.join(inputDir, '**/*.md')),
+    pull.asyncMap(async (file, callback) => {
+      try {
+        const content = await renderMarkdown(file.data, { css, style })
+        file.data = content.value
+        file.path = file.path.replace('.md', '.html')
+      } catch (error) {
+        appendFile(path.join(outputDir, '.mdsg.error.log'), `Error rendering markdown of ${path.join(file.base, file.path)} : ${error}\n`)
+      } finally {
+        // carry on regardless 🤷
+        callback(null, file)
+      }
+    })
+  )
 
   return new Promise((resolve, reject) => {
-    // read markdown and process with remark plugins
-    pull(
-      read(path.join(inputDir, '**/*.md')),
-      pull.asyncMap(async (file, callback) => {
-        try {
-          const content = await renderMarkdown(file.data, { css, style })
-          file.data = content.value
-          file.path = file.path.replace('.md', '.html')
-        } catch (error) {
-          appendFile(path.join(outputDir, 'mdsg.error.log'), `Error rendering markdown of ${path.join(file.base, file.path)} : ${error}\n`)
-        } finally {
-          // carry on regardless 🤷
-          callback(null, file)
-        }
-      }),
-      write(outputDir, async error => {
-        if (error) reject(new Error('Error converting markdown', error))
-        else {
-          print('Finished writing to', outputDir)
-          resolve()
-        }
+    if (stdout) {
+      pull(
+        contentStream,
+        pull.through(file => pipeFile({ ...file, asset: false })),
+        pull.collect(() => { resolve() })
+      )
+    } else {
+      ensureDir(outputDir).then(() => {
+        pull(
+          contentStream,
+          write(outputDir, async error => {
+            if (error) reject(new Error('Error converting markdown', error))
+            else {
+              print('Finished writing to', outputDir)
+              resolve()
+            }
+          })
+        )
       })
-    )
+    }
   })
+}
+
+function pipeFile (file) {
+  try {
+    encodeStream.write(file)
+  } catch (error) {
+    console.error('Error writing to stdout', error)
+  }
 }
 
 async function concatenateCss (directory) {
@@ -78,14 +108,25 @@ export async function outputAssets (outputDir) {
 async function copyAssets (assets, outputDir) {
   const outDir = path.join(outputDir, path.basename(assets))
   print(`Copying assets from ${assets} to ${outputDir}`)
+  const assetStream = pull(read(path.join(assets, '**/*.*')))
   return new Promise((resolve, reject) => {
-    pull(
-      read(path.join(assets, '**/*.*')),
-      write(outDir, error => {
-        if (error) reject(new Error('Error copying assets', error))
-        else resolve('Finished copying assets to', outputDir)
+    if (stdout) {
+      pull(
+        assetStream,
+        pull.through(file => pipeFile({ ...file, asset: true })),
+        pull.collect(() => { resolve() })
+      )
+    } else {
+      ensureDir(outputDir).then(() => {
+        pull(
+          assetStream,
+          write(outDir, error => {
+            if (error) reject(new Error('Error copying assets', error))
+            else resolve('Finished copying assets to', outputDir)
+          })
+        )
       })
-    )
+    }
   })
 }
 

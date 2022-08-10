@@ -22,7 +22,7 @@ input = input || process.cwd()
 output = output || join(input, 'output')
 
 try {
-  await render(input, output, { log })
+  await render(input, output, { log, pipeout: !process.stdout.isTTY })
 } catch (error) {
   console.error('Error rendering markdown:', error)
 } finally {
@@ -47,7 +47,7 @@ function help () {
 `
 }
 
-function yamlHelp() {
+function yamlHelp () {
   return `
   ---
   key: value

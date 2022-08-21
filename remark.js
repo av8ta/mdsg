@@ -45,6 +45,14 @@ const authored = (_node, _index, _parent, data) => {
       ${data.readingTime.minutes > 1 ? html`<em> ~ ${data.readingTime.text}</em>` : ''}
     </span>`
 }
+/** load MPA routes like a SPA */
+const flamethrower = () => html`
+  <script defer type="module">
+    import flamethrower from '/assets/flamethrower.js'
+    flamethrower({ prefetch: 'visible', log: true, pageTransitions: true })
+  </script>
+  `
+
 async function processMarkdown (string) {
   const file = await unified()
     .use(remarkParse)
@@ -83,12 +91,18 @@ export async function renderMarkdown (string, { css = [], style = [] } = {}) {
     // replace <authored /> with author and date from yaml frontmatter
     // along with reading time from remark-reading-time plugin
     // removes the <authored /> tag if neither author nor reading time data available
-    .use(rehypeHtm, {
+    .use(options => rehypeHtm(options), {
       data: { date, author, readingTime },
       template: authored,
-      selector: (node, _index, _parent) => isElement(node, 'authored')
+      selector: (node, _index, _parent) => isElement(node, 'authored'),
+      append: false
     })
     .use(rehypeDocument, { title, meta, css, style })
+    .use(options => rehypeHtm(options), {
+      template: flamethrower,
+      selector: 'head :last-child',
+      append: true
+    })
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings)
     .use(rehypeFormat)

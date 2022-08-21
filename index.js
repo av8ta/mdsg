@@ -6,6 +6,7 @@ import rc from 'rc'
 import { appendFile } from 'node:fs/promises'
 import { ensureDir } from 'fs-extra'
 import { PackrStream } from 'msgpackr'
+import { isString } from './utils.js'
 
 let print
 let stdout = false
@@ -40,6 +41,8 @@ export async function render (inputDir = process.cwd(), outputDir = process.cwd(
     // read markdown files and process with remark plugins
     read(path.join(inputDir, '**/*.md')),
     pull.asyncMap(async (file, callback) => {
+      // skip files or directories that start with an underscore
+      if (file.path.startsWith('_')) callback(new Error(`Skipping: ${path.join(file.base, file.path)}`))
       try {
         const content = await renderMarkdown(file.data, { css, style })
         file.data = content.value
@@ -64,9 +67,10 @@ export async function render (inputDir = process.cwd(), outputDir = process.cwd(
       ensureDir(outputDir).then(() => {
         pull(
           contentStream,
-          write(outputDir, async error => {
-            if (error) reject(new Error('Error converting markdown', error))
-            else {
+          write(outputDir, error => {
+            if (error && !error.message.startsWith('Skipping:')) {
+              reject(new Error(`Error converting markdown: ${error.message}`))
+            } else {
               print('Finished writing to', outputDir)
               resolve()
             }
@@ -107,14 +111,15 @@ export async function outputAssets (outputDir) {
 
 async function copyAssets (assets, outputDir) {
   const outDir = path.join(outputDir, path.basename(assets))
-  print(`Copying assets from ${assets} to ${outputDir}`)
+  !stdout && print(`Copying assets from ${assets} to ${outputDir}`)
+  stdout && print(`Piping assets from ${assets} to stdout`)
   const assetStream = pull(read(path.join(assets, '**/*.*')))
   return new Promise((resolve, reject) => {
     if (stdout) {
       pull(
         assetStream,
         pull.through(file => pipeFile({ ...file, asset: true })),
-        pull.collect(() => { resolve() })
+        pull.collect(() => resolve())
       )
     } else {
       ensureDir(outputDir).then(() => {
@@ -128,8 +133,4 @@ async function copyAssets (assets, outputDir) {
       })
     }
   })
-}
-
-function isString (s) {
-  return !!(typeof s === 'string' || s instanceof String)
 }

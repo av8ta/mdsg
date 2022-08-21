@@ -68,3 +68,10 @@ When injecting, the css is loaded from `**/*.css` files in the assets directory.
 ## assets
 
 The assets directory contents are copied to the output directory.
+
+## skipping content
+
+Directories or files with a leading underscore are skipped when reading content.
+
+e.g. naming your output directory to `_site/` would ensure it's skipped on a subsequent run.
+ 

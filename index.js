@@ -12,7 +12,7 @@ let print
 let stdout = false
 let encodeStream
 
-export async function render (inputDir = process.cwd(), outputDir = process.cwd(), { log = console.warn, pipeout = false }) {
+export async function render (inputDir = process.cwd(), outputDir = `${path.join(process.cwd(), '_output')}`, { log = console.warn, pipeout = false }) {
   stdout = pipeout
   if (stdout) {
     encodeStream = new PackrStream({})
@@ -104,7 +104,7 @@ async function concatenateCss (directory) {
   })
 }
 
-export async function outputAssets (outputDir) {
+export async function outputAssets (outputDir = `${path.join(process.cwd(), '_output')}`) {
   const config = rc('mdsg', {})
   if (config.assets) await copyAssets(config.assets, outputDir)
 }

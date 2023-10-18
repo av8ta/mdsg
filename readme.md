@@ -10,7 +10,7 @@ npm i -g mdsg
 
 # usage
 
-Convert `*.md` files in current directory to html and write to `./output/`
+Convert `*.md` files in current directory to html and write to `./_output/`
 
 ```sh
 mdsg

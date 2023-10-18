@@ -2,6 +2,7 @@
 import { render, outputAssets } from './index.js'
 import Debug from 'debug'
 import minimist from 'minimist2'
+import path from 'node:path'
 
 const log = process.env.DEBUG ? Debug('mdsg') : console.warn
 
@@ -18,7 +19,7 @@ if (argv.yaml) {
 
 let [input, output] = argv._
 input = input || process.cwd()
-output = output || input
+output = output || path.join(input, '_output')
 
 try {
   await render(input, output, { log, pipeout: !process.stdout.isTTY })

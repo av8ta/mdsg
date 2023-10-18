@@ -6,6 +6,9 @@
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
+    "example": "./bin.js example/",
+    "serve": "serve example/_output",
+    "clean": "rimraf _output example/_output",
     "lint": "standard --fix",
     "debug": "DEBUG=mdsg ./bin.js ./input ./output",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -54,6 +57,8 @@
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
+    "rimraf": "^5.0.5",
+    "serve": "^14.2.1",
     "standard": "^17.0.0"
   },
   "standard": {

@@ -6,6 +6,9 @@
   "main": "index.js",
   "bin": "bin.js",
   "scripts": {
+    "roll": "npx rollup -c",
+    "package": "npx pkg -t node16-linux-x64,node16-macos-x64,node16-win-x64 dist/bin.cjs --out-path dist",
+    "build": "npm run roll && npm run package",
     "example": "./bin.js example/",
     "serve": "serve example/_output",
     "clean": "rimraf _output example/_output",
@@ -57,7 +60,11 @@
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@yao-pkg/pkg": "^5.10.0",
     "rimraf": "^5.0.5",
+    "rollup": "^4.5.0",
     "serve": "^14.2.1",
     "standard": "^17.0.0"
   },

@@ -23,7 +23,7 @@ import { lowlight } from 'lowlight/lib/all.js'
 import { rehypeHtm, html } from './htm.js'
 import { isElement } from 'hast-util-is-element'
 
-const languages = await importLanguages(lowlight)
+const languages = async () => await importLanguages(lowlight)
 
 const removeFrontmatter = () => tree => filter(tree, node => node.type !== 'yaml')
 

@@ -5,7 +5,7 @@ import path from 'node:path'
 import rc from 'rc'
 import { appendFile } from 'node:fs/promises'
 import { ensureDir } from 'fs-extra'
-import { PackrStream } from 'msgpackr'
+// import { PackrStream } from 'msgpackr/stream.js'
 import { isString } from './utils.js'
 
 let print
@@ -14,6 +14,10 @@ let encodeStream
 
 export async function render (inputDir = process.cwd(), outputDir = `${path.join(process.cwd(), '_output')}`, { log = console.warn, pipeout = false }) {
   stdout = pipeout
+
+  // hack: forcefully remove msgpackr stream so we can get the tool to rollup
+  // todo: remove functionality / make work with rollup
+  stdout = false
   if (stdout) {
     encodeStream = new PackrStream({})
     encodeStream.pipe(process.stdout).on('error', error => {

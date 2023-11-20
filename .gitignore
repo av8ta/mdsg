@@ -3,3 +3,4 @@ input/
 _output/
 *.env*
 .vscode
+dist/

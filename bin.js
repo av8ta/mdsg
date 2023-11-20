@@ -6,33 +6,38 @@ import path from 'node:path'
 
 const log = process.env.DEBUG ? Debug('mdsg') : console.warn
 
-const argv = minimist(process.argv.slice(2))
+main()
 
-if (argv.help) {
-  console.warn(help())
+async function main() {
+  const argv = minimist(process.argv.slice(2))
+
+  if (argv.help) {
+    console.warn(help())
+    process.exit(0)
+  }
+  if (argv.yaml) {
+    console.warn(yamlHelp())
+    process.exit(0)
+  }
+
+  let [input, output] = argv._
+  input = input || process.cwd()
+  output = output || path.join(input, '_output')
+
+  try {
+    await render(input, output, { log, pipeout: !process.stdout.isTTY })
+  } catch (error) {
+    console.error('Error rendering markdown:', error)
+  } finally {
+    // copy assets directory to output directory
+    await outputAssets(output)
+  }
+
   process.exit(0)
 }
-if (argv.yaml) {
-  console.warn(yamlHelp())
-  process.exit(0)
-}
 
-let [input, output] = argv._
-input = input || process.cwd()
-output = output || path.join(input, '_output')
 
-try {
-  await render(input, output, { log, pipeout: !process.stdout.isTTY })
-} catch (error) {
-  console.error('Error rendering markdown:', error)
-} finally {
-  // copy assets directory to output directory
-  await outputAssets(output)
-}
-
-process.exit(0)
-
-function help () {
+function help() {
   return `
   Usage
     $ mdsg <inputDir?> <outputDir?> [options]
@@ -47,7 +52,7 @@ function help () {
 `
 }
 
-function yamlHelp () {
+function yamlHelp() {
   return `
   ---
   key: value
